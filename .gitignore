@@ -4,11 +4,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Build outputs
-dist/
-build/
-*.tsbuildinfo
-
 # Environment variables
 .env
 .env.local
@@ -16,23 +11,19 @@ build/
 .env.test.local
 .env.production.local
 
-# Configuration files with sensitive data
-followupai.config.json
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
 
 # IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
 
-# OS generated files
+# OS files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 
 # Logs
@@ -80,23 +71,23 @@ jspm_packages/
 .cache
 .parcel-cache
 
-# next.js build output
+# Next.js build output
 .next
 
-# nuxt.js build output
+# Nuxt.js build / generate output
 .nuxt
 
-# vuepress build output
-.vuepress/dist
+# Storybook build outputs
+.out
+.storybook-out
 
-# Serverless directories
-.serverless/
+# Temporary folders
+tmp/
+temp/
 
-# FuseBox cache
-.fusebox/
+# Generated questions
+GeneratedQuestions/
 
-# DynamoDB Local files
-.dynamodb/
-
-# TernJS port file
-.tern-port 
+# Config files with real API keys (keep placeholders)
+easyflow.config.json
+followupai.config.json 
