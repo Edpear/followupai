@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>followupai Demo Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .question {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .choices {
+            margin-bottom: 15px;
+        }
+
+        .choice {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .choice:hover {
+            background: #e3f2fd;
+        }
+
+        .choice.correct {
+            background: #c8e6c9;
+            border-left: 4px solid #4caf50;
+        }
+
+        .choice.incorrect {
+            background: #ffcdd2;
+            border-left: 4px solid #f44336;
+        }
+
+        .choice.selected {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+        }
+
+        .show-explanation-btn {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            margin-top: 15px;
+            width: auto;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .result-msg {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .result-msg.correct {
+            background: #c8e6c9;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+        }
+
+        .result-msg.incorrect {
+            background: #ffcdd2;
+            color: #c62828;
+            border: 1px solid #f44336;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 followupai Demo Test</h1>
+        
+        <button onclick="loadTestQuestion()">Load Test Question</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let selectedAnswer = null;
+        let answered = false;
+        let questionData = null;
+
+        // Test question data
+        const testQuestion = {
+            question: "What is the difference between '==' and '===' in JavaScript?",
+            choices: [
+                "They are identical operators",
+                "== checks value and type, === checks only value",
+                "== checks only value, === checks value and type",
+                "They are used for different data types"
+            ],
+            correctAnswer: "== checks only value, === checks value and type",
+            explanation: "The == operator performs type coercion before comparison, while === requires both value and type to match. This is why === is generally preferred for more predictable comparisons."
+        };
+
+        function loadTestQuestion() {
+            questionData = testQuestion;
+            displayQuestion(questionData);
+        }
+
+        function displayQuestion(questionData) {
+            const resultDiv = document.getElementById('result');
+            selectedAnswer = null;
+            answered = false;
+
+            const html = `
+                <div class="result">
+                    <div class="question">${questionData.question}</div>
+                    <div class="choices">
+                        ${questionData.choices.map((choice, index) => `
+                            <div class="choice" onclick="selectAnswer('${choice}')">
+                                <strong>${String.fromCharCode(65 + index)}.</strong> ${choice}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button onclick="checkAnswer()" id="checkBtn" style="display: none;">Submit Answer</button>
+                    <div id="resultMsg" style="display: none;"></div>
+                    <button onclick="showExplanation()" id="showExplanationBtn" style="display: none;" class="show-explanation-btn">Show Explanation</button>
+                    <div id="explanation" style="display: none;"></div>
+                </div>
+            `;
+
+            resultDiv.innerHTML = html;
+        }
+
+        function selectAnswer(answer) {
+            if (answered) return; // Don't allow selection after answering
+            
+            selectedAnswer = answer;
+            
+            // Remove previous selections
+            document.querySelectorAll('.choice').forEach(choice => {
+                choice.classList.remove('selected');
+            });
+            
+            // Highlight selected answer
+            event.target.classList.add('selected');
+            
+            // Show submit button
+            document.getElementById('checkBtn').style.display = 'block';
+        }
+
+        function checkAnswer() {
+            if (!selectedAnswer || answered) return;
+
+            answered = true;
+            const isCorrect = selectedAnswer === questionData.correctAnswer;
+            
+            // Disable choice selection
+            document.querySelectorAll('.choice').forEach(choice => {
+                choice.style.cursor = 'default';
+                choice.onclick = null;
+            });
+            
+            // Highlight correct and incorrect answers
+            const choices = document.querySelectorAll('.choice');
+            choices.forEach(choice => {
+                const choiceText = choice.textContent.replace(/^[A-Z]\.\s*/, '');
+                if (choiceText === questionData.correctAnswer) {
+                    choice.classList.add('correct');
+                } else if (choiceText === selectedAnswer && selectedAnswer !== questionData.correctAnswer) {
+                    choice.classList.add('incorrect');
+                }
+            });
+
+            // Show result message
+            const resultMsgDiv = document.getElementById('resultMsg');
+            resultMsgDiv.innerHTML = `
+                <div class="result-msg ${isCorrect ? 'correct' : 'incorrect'}">
+                    ${isCorrect ? '✅ Correct!' : '❌ Incorrect!'}
+                </div>
+            `;
+            resultMsgDiv.style.display = 'block';
+            
+            // Hide submit button and show explanation button
+            document.getElementById('checkBtn').style.display = 'none';
+            document.getElementById('showExplanationBtn').style.display = 'block';
+            
+            // If answer is incorrect, show explanation automatically
+            if (!isCorrect) {
+                showExplanation();
+            }
+        }
+
+        function showExplanation() {
+            const explanationDiv = document.getElementById('explanation');
+            explanationDiv.innerHTML = `
+                <div class="explanation">
+                    <strong>Explanation:</strong> ${questionData.explanation}
+                </div>
+            `;
+            explanationDiv.style.display = 'block';
+            
+            // Hide the show explanation button
+            document.getElementById('showExplanationBtn').style.display = 'none';
+        }
+    </script>
+</body>
+</html> 

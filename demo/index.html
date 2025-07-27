@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>followupai Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #6b7280;
+            font-weight: 400;
+        }
+
+        .form-section {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            background: #ffffff;
+            color: #1a1a1a;
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        button {
+            background: #1a1a1a;
+            color: #ffffff;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        button:hover:not(:disabled) {
+            background: #000000;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 32px;
+            margin-top: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .choices {
+            margin-bottom: 24px;
+        }
+
+        .choice {
+            padding: 16px 20px;
+            margin: 8px 0;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .choice:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .choice.selected {
+            background: #f3f4f6;
+            border-color: #1a1a1a;
+            font-weight: 600;
+            box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
+        }
+
+        .choice.correct {
+            background: #f0fdf4;
+            border-color: #16a34a;
+            color: #166534;
+        }
+
+        .choice.incorrect {
+            background: #fef2f2;
+            border-color: #dc2626;
+            color: #991b1b;
+        }
+
+        .choice.selected.correct {
+            background: #f0fdf4;
+            border-color: #16a34a;
+            color: #166534;
+        }
+
+        .choice.selected.incorrect {
+            background: #fef2f2;
+            border-color: #dc2626;
+            color: #991b1b;
+        }
+
+        .explanation {
+            margin-top: 24px;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #1a1a1a;
+        }
+
+        .explanation strong {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .loading {
+            text-align: center;
+            color: #6b7280;
+            font-style: italic;
+            padding: 40px 20px;
+        }
+
+        .error {
+            color: #dc2626;
+            background: #fef2f2;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-top: 24px;
+            border: 1px solid #fecaca;
+        }
+
+        .result-message {
+            margin-bottom: 16px;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .result-message.correct {
+            color: #16a34a;
+        }
+
+        .result-message.incorrect {
+            color: #dc2626;
+        }
+
+        .new-question-btn {
+            background: #16a34a;
+            margin-top: 20px;
+        }
+
+        .new-question-btn:hover:not(:disabled) {
+            background: #15803d;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 40px 16px;
+            }
+            
+            h1 {
+                font-size: 36px;
+            }
+            
+            .form-section {
+                padding: 24px;
+            }
+            
+            .result {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>followupai</h1>
+            <p class="subtitle">Generate intelligent follow-up questions with AI</p>
+        </div>
+        
+        <div class="form-section">
+            <div class="form-group">
+                <label for="topic">Topic</label>
+                <input type="text" id="topic" placeholder="e.g., JavaScript, Machine Learning, History..." value="JavaScript">
+            </div>
+
+            <div class="form-group">
+                <label for="context">Context (Optional)</label>
+                <textarea id="context" rows="3" placeholder="Add any additional context or specific focus areas..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="difficulty">Difficulty</label>
+                <select id="difficulty">
+                    <option value="">Any difficulty</option>
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+
+            <button onclick="generateQuestion()" id="generateBtn">Generate Question</button>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let selectedAnswer = null;
+
+        async function generateQuestion() {
+            const topic = document.getElementById('topic').value.trim();
+            const context = document.getElementById('context').value.trim();
+            const difficulty = document.getElementById('difficulty').value;
+            const resultDiv = document.getElementById('result');
+            const generateBtn = document.getElementById('generateBtn');
+
+            if (!topic) {
+                alert('Please enter a topic');
+                return;
+            }
+
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+            resultDiv.innerHTML = '<div class="loading">Generating your question...</div>';
+
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        topic,
+                        context: context || undefined,
+                        difficulty: difficulty || undefined
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate question');
+                }
+
+                const data = await response.json();
+                displayQuestion(data);
+            } catch (error) {
+                resultDiv.innerHTML = '<div class="error">Error generating question: ' + error.message + '</div>';
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Question';
+            }
+        }
+
+        function displayQuestion(questionData) {
+            const resultDiv = document.getElementById('result');
+            selectedAnswer = null;
+
+            const html = `
+                <div class="result">
+                    <div class="question">${questionData.question}</div>
+                    <div class="choices">
+                        ${questionData.choices.map((choice, index) => `
+                            <div class="choice" onclick="selectAnswer('${choice}')">
+                                <strong>${String.fromCharCode(65 + index)}.</strong> ${choice}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button onclick="checkAnswer()" id="checkBtn" style="display: none;">Check Answer</button>
+                    <div id="explanation" style="display: none;"></div>
+                </div>
+            `;
+
+            resultDiv.innerHTML = html;
+        }
+
+        function selectAnswer(answer) {
+            selectedAnswer = answer;
+            
+            // Remove previous selections
+            document.querySelectorAll('.choice').forEach(choice => {
+                choice.classList.remove('selected');
+            });
+            
+            // Highlight selected answer
+            event.target.classList.add('selected');
+            
+            // Show check button
+            document.getElementById('checkBtn').style.display = 'block';
+        }
+
+        function checkAnswer() {
+            if (!selectedAnswer) return;
+
+            const choices = document.querySelectorAll('.choice');
+            const explanationDiv = document.getElementById('explanation');
+            const checkBtn = document.getElementById('checkBtn');
+            
+            // Disable the check button to prevent multiple submissions
+            checkBtn.disabled = true;
+            checkBtn.textContent = 'Answer Checked';
+            
+            let isCorrect = false;
+            
+            // Find the index of the selected answer
+            const selectedIndex = questionData.choices.findIndex(choice => choice === selectedAnswer);
+            
+            // Compare the selected answer with the correct answer
+            isCorrect = selectedAnswer === questionData.correctAnswer;
+            
+            // Highlight all choices
+            choices.forEach((choice, index) => {
+                const choiceText = questionData.choices[index];
+                if (choiceText === questionData.correctAnswer) {
+                    choice.classList.add('correct');
+                } else if (index === selectedIndex && !isCorrect) {
+                    choice.classList.add('incorrect');
+                }
+            });
+
+            // Show result message
+            const resultMessage = isCorrect ? 
+                '<div class="result-message correct">✅ Correct!</div>' :
+                '<div class="result-message incorrect">❌ Incorrect</div>';
+
+            explanationDiv.innerHTML = `
+                ${resultMessage}
+                <div class="explanation">
+                    <strong>Explanation:</strong> ${questionData.explanation}
+                </div>
+                <button onclick="generateQuestion()" class="new-question-btn">Generate New Question</button>
+            `;
+            explanationDiv.style.display = 'block';
+        }
+
+        // Store question data globally for answer checking
+        let questionData = null;
+
+        // Override displayQuestion to store data
+        const originalDisplayQuestion = displayQuestion;
+        displayQuestion = function(data) {
+            questionData = data;
+            originalDisplayQuestion(data);
+        };
+    </script>
+</body>
+</html>

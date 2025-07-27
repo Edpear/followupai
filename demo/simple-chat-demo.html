@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chat Demo - Add Chatbot in 1 Line!</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+        
+        .demo-section {
+            margin-bottom: 40px;
+        }
+        
+        .demo-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .usage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .usage-card {
+            border: 1px solid #e1e5e9;
+            border-radius: 12px;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .usage-card h3 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        
+        .step {
+            background: #e3f2fd;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .step-number {
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Simple Chat Demo</h1>
+        <p class="subtitle">Add a powerful AI chatbot to any page with just 1 line of code!</p>
+        
+        <div class="demo-section">
+            <h2 class="demo-title">Super Simple Usage</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Install the package:</strong>
+                <div class="code-example">npm install followupai</div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Add to your React component:</strong>
+                <div class="code-example">import { QuickChat } from 'followupai';
+
+function MyPage() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;My Website&lt;/h1&gt;
+      <span class="highlight">&lt;QuickChat apiKey="your-groq-api-key" /&gt;</span>
+    &lt;/div&gt;
+  );
+}</div>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>That's it! You now have a fully functional AI chatbot.</strong>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2 class="demo-title">Different Usage Options</h2>
+            
+            <div class="usage-grid">
+                <div class="usage-card">
+                    <h3>🔑 With API Key</h3>
+                    <div class="code-example">&lt;QuickChat apiKey="your-key" /&gt;</div>
+                </div>
+                
+                <div class="usage-card">
+                    <h3>🌍 With Environment Variable</h3>
+                    <div class="code-example">// Set GROQ_API_KEY in .env
+&lt;QuickChat /&gt;</div>
+                </div>
+                
+                <div class="usage-card">
+                    <h3>🎨 Customized</h3>
+                    <div class="code-example">&lt;SimpleChat 
+  placeholder="Ask me anything..."
+  style={{ maxWidth: '500px' }}
+/&gt;</div>
+                </div>
+                
+                <div class="usage-card">
+                    <h3>📚 Multiple Chats</h3>
+                    <div class="code-example">&lt;div style={{display: 'grid', gridTemplateColumns: '1fr 1fr'}}&gt;
+  &lt;QuickChat /&gt;
+  &lt;QuickChat /&gt;
+&lt;/div&gt;</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2 class="demo-title">Features</h2>
+            <ul>
+                <li>✅ <strong>One-line setup</strong> - Just import and use</li>
+                <li>✅ <strong>Auto-generated questions</strong> - Creates multiple choice questions from any topic</li>
+                <li>✅ <strong>Beautiful UI</strong> - Modern chat interface with typing indicators</li>
+                <li>✅ <strong>Responsive design</strong> - Works on all devices</li>
+                <li>✅ <strong>Customizable</strong> - Change colors, size, placeholder text</li>
+                <li>✅ <strong>Error handling</strong> - Graceful error messages</li>
+                <li>✅ <strong>Environment support</strong> - Use .env files for API keys</li>
+            </ul>
+        </div>
+        
+        <div class="demo-section">
+            <h2 class="demo-title">What Users Can Do</h2>
+            <p>Users can ask the chatbot to generate questions about any topic:</p>
+            <div class="code-example">"Create a question about JavaScript"
+"Generate a math problem for 5th graders"
+"Make a science quiz about the solar system"
+"Ask me about machine learning concepts"</div>
+        </div>
+        
+        <div class="demo-section">
+            <h2 class="demo-title">Advanced Usage</h2>
+            <div class="code-example">import { SimpleChat } from 'followupai';
+
+&lt;SimpleChat 
+  apiKey="your-groq-api-key"
+  model="llama-3.1-70b-version"
+  placeholder="What topic would you like me to create a question about?"
+  className="my-custom-chat"
+  style={{ 
+    maxWidth: '800px',
+    border: '2px solid #007bff',
+    borderRadius: '16px'
+  }}
+/&gt;</div>
+        </div>
+        
+        <div class="demo-section">
+            <h2 class="demo-title">Get Started Now</h2>
+            <p>Ready to add AI-powered questions to your website? It's that simple!</p>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Get your Groq API key from <a href="https://console.groq.com" target="_blank">console.groq.com</a></strong>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Install: <code>npm install followupai</code></strong>
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Add: <code>&lt;QuickChat apiKey="your-key" /&gt;</code></strong>
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Done! Your chatbot is ready to use.</strong>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
